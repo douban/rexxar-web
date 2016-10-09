@@ -1,0 +1,10 @@
+[
+  {
+    "filename": "rexxar/demo",
+    "uri": "douban://douban.com/rexxar_demo[/]?.*"
+  },
+  {
+    "filename": "rexxar/demo",
+    "uri": "douban://partial.douban.com/rexxar_demo/_.*"
+  }
+]

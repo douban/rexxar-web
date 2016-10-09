@@ -1,0 +1,27 @@
+body {
+  font-size: 14px;
+  color: #880000;
+}
+
+h1 {
+  font-size: 1.3em;
+  margin: 15px 0 8px;
+}
+
+p {
+  margin: 4px 0;
+}
+
+input, select {
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #555;
+  font-size: 1.3em;
+}
+
+input[type="button"] {
+  display: block;
+  padding: 3px 6px;
+  margin: 7px 0;
+  -webkit-appearance: button;
+}
