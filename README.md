@@ -23,14 +23,14 @@ $ npm install rexxar-web --save
 ### getRexxarWidget
 
 ```js
-import { getWidgetBase } from 'rexxar-web';
+import { getRexxarWidget } from 'rexxar-web';
 
-const RexxarWidget = getWidgetBase({
+const RexxarWidget = getRexxarWidget({
   scheme: 'douban',
   host: 'rexxar-container'
 });
 
-class NavTitle extends RexxarWidget {
+class Title extends RexxarWidget {
   constructor(title) {
     super('title');
     this.title = title;
@@ -39,13 +39,13 @@ class NavTitle extends RexxarWidget {
     super.call({ title: this.title });
   }
 }
-let title = new NavTitle('My Title');
+let title = new Title('My Title');
 title.show();
 ```
 
 #### getRexxarWidget(config)
 
-传入 Widget 协议的相关配置，返回 RexxarWidget 基类，推荐使用继承的方式编写自己的业务组件。
+配置 Widget 协议的 scheme 和 host，获取 RexxarWidget 基类，推荐使用继承的方式编写自己的组件。
 
 ##### `config.scheme`
 
@@ -73,7 +73,7 @@ rexxarFetch('/request')
 
 #### rexxarFetch(input[, init])
 
-rexxarFetch 是对 [window.fetch](https://fetch.spec.whatwg.org/) 的包装，提供与 [fetch](https://github.com/github/fetch) 一样的接口和用法。值得注意的是，在 Android Container 中使用 POST 会有所限制，只允许 `content-type` 为 `application/x-www-form-urlencoded` 的请求。
+rexxarFetch 是对 [fetch](https://github.com/github/fetch) 的包装，提供与 [window.fetch](https://fetch.spec.whatwg.org/) 一样的接口和用法。值得注意的是，在 Android Container 中使用 POST 会有所限制，只允许 `content-type` 为 `application/x-www-form-urlencoded` 的请求。
 
 ## 开发与部署
 
