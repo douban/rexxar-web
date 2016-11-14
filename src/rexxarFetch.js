@@ -34,11 +34,18 @@ export default function rexxarFetch(input, init) {
     let contentType = request.headers.get('content-type');
     let body = init.body || '';
 
-    if (getType(body) === 'String' && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
-      input = `${input}&${body}&_rexxar_method=POST`.replace(/[&?]/, '?');
-      promise = fetch(input);
+    if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
+      if (window && 'URLSearchParams' in window && URLSearchParams.prototype.isPrototypeOf(body)) {
+        body = body.toString();
+      }
+      if (getType(body) === 'String') {
+        input = `${input}&${body}&_rexxar_method=POST`.replace(/[&?]/, '?');
+        promise = fetch(input);
+      } else {
+        throw new Error('rexxarFetch for Android Cannot handle this body type');
+      }
     } else {
-      throw new Error('Rexxar Android only supports `application/x-www-form-urlencoded` as content-type');
+      throw new Error('rexxarFetch for Android only supports `application/x-www-form-urlencoded` as content-type');
     }
   } else {
     promise = fetch(request);
