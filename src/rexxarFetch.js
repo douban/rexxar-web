@@ -32,9 +32,12 @@ export default function rexxarFetch(input, init) {
 
   if (request.method === 'POST' && isAndroid) {
     let contentType = request.headers.get('content-type');
-    let body = init.body || '';
+    let body = init.body;
 
-    if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
+    if (!contentType && !body ) {
+      input = `${input}&_rexxar_method=POST`.replace(/[&?]/, '?');
+      promise = fetch(input);
+    } else if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
       if (window && 'URLSearchParams' in window && URLSearchParams.prototype.isPrototypeOf(body)) {
         body = body.toString();
       }
