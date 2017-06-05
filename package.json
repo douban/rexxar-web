@@ -1,6 +1,6 @@
 {
   "name": "rexxar-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Rexxar Web",
   "main": "./lib/index.js",
   "scripts": {
