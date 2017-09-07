@@ -9,7 +9,7 @@ const isAndroid = navigator ? /android/i.test(navigator.userAgent.toLowerCase())
 /**
  * `rexxarFetch` wraps whatwg-fetch function. Use rexxarFetch like using the normal fetch API.
  * However, there are some limitation, rexxarFetch does not support Request object as
- * argument when you are using for POST in Android, and `application/x-www-form-urlencoded`
+ * argument when you are using for HTTP POST, and `application/x-www-form-urlencoded`
  * must be specified as content-type.
  *
  * @param {string|object} input Url string or a Request object
@@ -23,14 +23,14 @@ export default function rexxarFetch(input, init) {
 
   if (Request.prototype.isPrototypeOf(input) && !init) {
     request = input;
-    if (request.method === 'POST' && isAndroid) {
-      throw new Error('Please use `rexxarFetch(input, init)` for HTTP POST in Android');
+    if (request.method === 'POST') {
+      throw new Error('rexxarFetch POST error: please use `rexxarFetch(input, init)` for HTTP POST');
     }
   } else {
     request = new Request(input, init);
   }
 
-  if (request.method === 'POST' && isAndroid) {
+  if (request.method === 'POST') {
     let contentType = request.headers.get('content-type');
     let body = init.body;
 
@@ -38,17 +38,17 @@ export default function rexxarFetch(input, init) {
       input = `${input}&_rexxar_method=POST`.replace(/[&?]/, '?');
       promise = fetch(input);
     } else if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
-      if (window && 'URLSearchParams' in window && URLSearchParams.prototype.isPrototypeOf(body)) {
+      if (window && 'URLSearchParams' in window && window.URLSearchParams.prototype.isPrototypeOf(body)) {
         body = body.toString();
       }
       if (getType(body) === 'String') {
         input = `${input}&${body}&_rexxar_method=POST`.replace(/[&?]/, '?');
         promise = fetch(input);
       } else {
-        throw new Error('rexxarFetch for Android Cannot handle this body type');
+        throw new Error('rexxarFetch POST error: cannot handle this body type');
       }
     } else {
-      throw new Error('rexxarFetch for Android only supports `application/x-www-form-urlencoded` as content-type');
+      throw new Error('rexxarFetch POST error: only supports `application/x-www-form-urlencoded` as content-type');
     }
   } else {
     promise = fetch(request);
