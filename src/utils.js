@@ -48,3 +48,35 @@ export function str2obj(str) {
 export function getType(obj) {
   return Object.prototype.toString.call(obj).slice(8, -1);
 }
+
+/**
+ * Declare a namespace from a string:
+ *
+ * namespace('Rexxar.Widget.AlertDialog') => Rexxar.Widget.AlertDialog = {}
+ *
+ * @param {string} ns
+ * @returns {object}
+ */
+export function namespace(ns) {
+  let names = ns.split('.');
+  let owner = window;
+  for (let i = 0; i < names.length; i++) {
+    let name = names[i];
+    owner[name] = owner[name] || {};
+    owner = owner[name];
+  }
+  return owner;
+}
+
+/**
+ * Go to uri
+ *
+ * @param {string} uri
+ */
+export function callUri(uri) {
+  let iframe = document.createElement('iframe');
+  iframe.src = uri;
+  iframe.style.display = 'none';
+  document.documentElement.appendChild(iframe);
+  setTimeout(() => document.documentElement.removeChild(iframe), 0);
+}

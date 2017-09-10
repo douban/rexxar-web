@@ -1,3 +1,7 @@
+/**
+ * IMPORTANT: This is deprecated
+ */
+
 import { obj2str, getType } from './utils';
 
 /**
