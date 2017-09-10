@@ -20,7 +20,64 @@ $ npm install rexxar-web --save
 
 ## 使用
 
-### getRexxarWidget
+### widgetMessenger
+
+`widgetMessenger` 是一个消息组装器，分段传入参数构成消息体
+
+```js
+let messenger = widgetMessenger('douban', 'rexxar-container')('widget/alert_dialog')
+```
+
+### callbackListener
+
+`callbackListener` 将注册给定的回调函数，并挂载到全局，用于客户端调用
+
+```js
+let cbName = callbackListener('Rexxar.Widget.AlertDialog')('confirm')(() => {})
+```
+
+### assemblePayload(obj[, base])
+
+`assemblePayload` 是将一个对象转化成消息中的payload
+
+```js
+let data = { 
+  title: 'AlertDialog',
+  callback: cbName,
+}
+let payload = assemblePayload(data)
+```
+
+### dispatch(messenger)
+
+`dispatch` 将由widgetMessenger组装好的消息分发给客户端
+
+```js
+dispatch(messenger(payload))
+```
+
+### rexxarFetch(input[, init])
+
+`rexxarFetch` 是对 [fetch](https://github.com/github/fetch) 的包装，提供与 [window.fetch](https://fetch.spec.whatwg.org/) 一样的接口和用法。值得注意的是，在使用 POST 时会有所限制，只允许 `content-type` 为 `application/x-www-form-urlencoded` 的请求。
+
+```js
+import { rexxarFetch } from 'rexxar-web';
+
+rexxarFetch('/request')
+  .then(response => response.json())
+  .then(data =>
+    console.log('request succeeded with JSON response', data)
+  )
+  .catch(error =>
+    console.log('request failed', error)
+  )
+```
+
+### getRexxarWidget(config)
+
+**Deprecated**
+
+配置 Widget 协议的 scheme 和 host，获取 RexxarWidget 基类，推荐使用继承的方式编写自己的组件。
 
 ```js
 import { getRexxarWidget } from 'rexxar-web';
@@ -42,38 +99,6 @@ class Title extends RexxarWidget {
 let title = new Title('My Title');
 title.show();
 ```
-
-#### getRexxarWidget(config)
-
-配置 Widget 协议的 scheme 和 host，获取 RexxarWidget 基类，推荐使用继承的方式编写自己的组件。
-
-##### `config.scheme`
-
-Type: `String`
-
-##### `config.host`
-
-Type: `String`
-
-
-### rexxarFetch
-
-```js
-import { rexxarFetch } from 'rexxar-web';
-
-rexxarFetch('/request')
-  .then(response => response.json())
-  .then(data =>
-    console.log('request succeeded with JSON response', data)
-  )
-  .catch(error =>
-    console.log('request failed', error)
-  )
-```
-
-#### rexxarFetch(input[, init])
-
-rexxarFetch 是对 [fetch](https://github.com/github/fetch) 的包装，提供与 [window.fetch](https://fetch.spec.whatwg.org/) 一样的接口和用法。值得注意的是，在 Android Container 中使用 POST 会有所限制，只允许 `content-type` 为 `application/x-www-form-urlencoded` 的请求。
 
 ## 开发与部署
 
@@ -109,6 +134,13 @@ $ gulp serve --ip 192.168.0.250
 $ gulp deploy
 ```
 在这个例子中我们用 `raw.githubusercontent.com` 作为我们的静态资源存放地址，iOS/Android Container 通过访问 `dist/routes.json` 获取路由文件。当然你可以使用自己的CDN服务器来存放资源，并且可以根据需求定制自己的测试环境和线上环境。
+
+## ChangeLog
+
+- v0.2.0
+  1. rexxarFetch 对于 iOS WKWebView 亦将 POST 转化成 GET 来处理，需要配合 [rexxar-ios v0.3.0](https://github.com/douban/rexxar-ios#changelog) 及以上使用
+  2. 新增 widgetMessenger, assemblePayload, callbackListener, dispatch
+  3. 废弃 getRexxarWidget
 
 ## License
 
