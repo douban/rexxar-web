@@ -1,16 +1,25 @@
-import RexxarWidget from './RexxarWidget';
+import { widgetMessenger, dispatch, assemblePayload } from 'rexxar-web';
 
-class Toast extends RexxarWidget {
+class Toast {
+  /**
+   * Show App Toast
+   *
+   * let toast = new Toast('error', '出错啦');
+   * toast.work();
+   *
+   * @param {string} level ('info'|'error'|'fatal')
+   * @param {string} message
+   */
   constructor(level, message) {
-    super('widget/toast');
     this.toastInfo = {
       level: level,
       message: message
     };
+    this._messenger = widgetMessenger('douban', 'rexxar-container')('widget/toast');
   }
 
   show() {
-    super.call(this.toastInfo);
+    dispatch(this._messenger(assemblePayload(this.toastInfo)));
   }
 }
 
