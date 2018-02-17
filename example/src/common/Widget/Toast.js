@@ -4,8 +4,8 @@ class Toast {
   /**
    * Show App Toast
    *
-   * let toast = new Toast('error', '出错啦');
-   * toast.work();
+   * let toast = new Toast('error', 'Oops');
+   * toast.show();
    *
    * @param {string} level ('info'|'error'|'fatal')
    * @param {string} message

@@ -5,10 +5,9 @@ class NavMenu {
    * Set Navigation Bar Menu
    *
    * let menu = new NavMenu();
-   * menu.work();
+   * menu.show();
    *
-   * @param {Object[]} [menu] You can pass the json data of the menu while initializing,
-   * if the menu data is not complicated. Otherwise, use addItem method.
+   * @param {Object[]} [menu] You can pass the json data of the menu while initializing.
    */
   constructor(menu = []) {
     this.menu = menu;
@@ -16,7 +15,7 @@ class NavMenu {
   }
 
   /**
-   * menu.addItem({type: 'share', ...});
+   * menu.addItem({type: 'button', ...});
    *
    * @param {Object} item
    * @returns this So that you can chain method calls.

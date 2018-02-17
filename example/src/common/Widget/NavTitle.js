@@ -4,8 +4,8 @@ class NavTitle {
   /**
    * Set Navigation Bar Title
    *
-   * let title = new NavTitle('标题');
-   * title.work();
+   * let title = new NavTitle('My Title');
+   * title.show();
    *
    * @param {string} title
    */
