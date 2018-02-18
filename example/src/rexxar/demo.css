@@ -10,6 +10,7 @@ h1 {
 
 p {
   margin: 4px 0;
+  word-wrap: break-word;
 }
 
 input, select {
@@ -21,6 +22,7 @@ input, select {
 
 input[type="button"] {
   display: block;
+  cursor: pointer;
   padding: 3px 6px;
   margin: 7px 0;
   -webkit-appearance: button;

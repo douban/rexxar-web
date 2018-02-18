@@ -1,20 +1,28 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import NavTitle from 'common/Widget/NavTitle';
 
-export default function TitleComponent() {
-  return (
-    <section>
-      <h1>Title</h1>
-      <p>Rexxar Demo Page</p>
-      <input
-        type='button'
-        onClick={() => {
-          let title = new NavTitle('Rexxar Demo Page');
-          title.show();
-        }}
-        value='Set Title'
-      />
-    </section>
-  )
+class TitleComponent extends PureComponent {
+  title = 'Rexxar Demo Title Set'
+
+  setTitle = () => {
+    let title = new NavTitle(this.title);
+    title.show();
+  }
+
+  render() {
+    return (
+      <section>
+        <h1>Title</h1>
+        <p>{this.title}</p>
+        <input
+          type='button'
+          onClick={this.setTitle}
+          value='Set Title'
+        />
+      </section>
+    )
+  }
 }
+
+export default TitleComponent;
