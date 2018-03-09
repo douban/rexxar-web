@@ -1,32 +1,33 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import AlertDialog from 'common/Widget/AlertDialog';
 
-class DialogComponent extends React.Component {
+class DialogComponent extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      btnClickedText: ''
-    };
   }
 
-  showDialog() {
+  state = {
+    btnClickedText: ''
+  }
+
+  showDialog = () => {
     let alertDialog = new AlertDialog({
-      title: '你好',
-      message: '这是一个示例弹框'
+      title: 'Dialog Title',
+      message: 'This is dialog message!'
     });
     alertDialog.addButton({
-      text: '取消',
+      text: 'Cancel',
       callback: () => {
         this.setState({
-          btnClickedText: '点了取消'
+          btnClickedText: 'Cancel clicked'
         })
       }
     }).addButton({
-      text: '确定',
+      text: 'Confirm',
       callback: () => {
         this.setState({
-          btnClickedText: '点了确定'
+          btnClickedText: 'Confirm clicked'
         })
       }
     }).show();
@@ -39,7 +40,7 @@ class DialogComponent extends React.Component {
         <p>{this.state.btnClickedText}</p>
         <input
           type='button'
-          onClick={() => this.showDialog()}
+          onClick={this.showDialog}
           value='Show'
         />
       </section>

@@ -1,18 +1,29 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 
 import Toast from 'common/Widget/Toast';
 
-class ToastComponent extends React.Component {
+class ToastComponent extends PureComponent {
   constructor(props) {
     super(props);
-    this.message = 'Hello Toast';
   }
 
-  clickToast() {
-    let level = this.refs.toastLevel.value;
+  message = 'Hello Toast'
+
+  state = {
+    value: 'info'
+  }
+
+  clickToast = () => {
+    let level = this.state.value;
     let message = this.message;
     let toast = new Toast(level, message);
     toast.show();
+  }
+
+  handleChange = (event) => {
+    this.setState({
+      value: event.target.value
+    });
   }
 
   render() {
@@ -21,7 +32,7 @@ class ToastComponent extends React.Component {
         <h1>Toast</h1>
         <p>
           Level:&nbsp;
-          <select ref='toastLevel'>
+          <select value={this.state.value} onChange={this.handleChange}>
             <option value='info'>info</option>
             <option value='error'>error</option>
             <option value='fatal'>fatal</option>
@@ -30,7 +41,7 @@ class ToastComponent extends React.Component {
         <p>Message: {this.message}</p>
         <input
           type='button'
-          onClick={() => this.clickToast()}
+          onClick={this.clickToast}
           value='Click Toast'
         />
       </section>

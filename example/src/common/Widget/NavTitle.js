@@ -1,14 +1,23 @@
-import RexxarWidget from './RexxarWidget';
+import { widgetMessenger, dispatch, assemblePayload } from 'rexxar-web';
 
-class NavTitle extends RexxarWidget {
+class NavTitle {
+  /**
+   * Set Navigation Bar Title
+   *
+   * let title = new NavTitle('My Title');
+   * title.show();
+   *
+   * @param {string} title
+   */
   constructor(title) {
-    super('widget/nav_title');
     this.title = title;
+    this._messenger = widgetMessenger('douban', 'rexxar-container')('widget/nav_title');
   }
 
   show() {
-    super.call({ title: this.title });
+    dispatch(this._messenger(assemblePayload({ title: this.title })));
+    document.title = this.title;
   }
 }
 
-export default NavTitle
+export default NavTitle;

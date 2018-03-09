@@ -11,7 +11,9 @@ module.exports = function(env) {
       preLoaders: [
         {
           test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
+          include: [
+            path.resolve(__dirname, 'src')
+          ],
           loader: 'eslint'
         }
       ],
@@ -22,7 +24,9 @@ module.exports = function(env) {
         },
         {
           test: /\.(js|jsx)$/,
-          exclude: /node_modules/,
+          include: [
+            path.resolve(__dirname, 'src')
+          ],
           loader: 'babel'
         },
         {
@@ -39,7 +43,8 @@ module.exports = function(env) {
     },
     resolve: {
       alias: {
-        common: path.join(__dirname, 'src/common')
+        common: path.join(__dirname, 'src/common'),
+        'rexxar-web': path.join(__dirname, '../lib/index')
       }
     },
     eslint: {
