@@ -44,7 +44,8 @@ module.exports = function(env) {
     resolve: {
       alias: {
         common: path.join(__dirname, 'src/common'),
-        'rexxar-web': path.join(__dirname, '../lib/index')
+        'rexxar-web': path.join(__dirname, '../lib/index'),
+        'isomorphic-fetch': path.join(__dirname, 'node_modules/isomorphic-fetch')
       }
     },
     eslint: {
