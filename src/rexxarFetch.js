@@ -92,6 +92,9 @@ function resolveResponse(response) {
 
     });
   } else {
+    if (response.status === 999) {
+      throw new TypeError('Network request failed');
+    }
     return response;
   }
 
