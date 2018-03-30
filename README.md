@@ -142,6 +142,23 @@ $ gulp deploy
   2. 新增 widgetMessenger, assemblePayload, callbackListener, dispatch
   3. 废弃 getRexxarWidget
 
+## Contributing
+
+### develop process
+
+1. develop on your branch
+2. run build via eslint
+3. test in example
+4. commit and pr
+
+### release process
+
+1. check build
+2. dump version to new one in package.json
+3. pr and merge into master
+4. add tag and write changelog
+5. npm publish
+
 ## License
 
 Rexxar is released under the MIT license. See LICENSE for details.
