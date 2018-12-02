@@ -9,7 +9,7 @@ const isAndroid = navigator ? /android/i.test(navigator.userAgent.toLowerCase())
 /**
  * `rexxarFetch` wraps whatwg-fetch function. Use rexxarFetch like using the normal fetch API.
  * However, there are some limitation, rexxarFetch does not support Request object as
- * argument when you are using for HTTP POST, and `application/x-www-form-urlencoded`
+ * argument when you are using for HTTP POST, PUT and DELETE, and `application/x-www-form-urlencoded`
  * must be specified as content-type.
  *
  * @param {string|object} input Url string or a Request object
@@ -23,32 +23,33 @@ export default function rexxarFetch(input, init) {
 
   if (Request.prototype.isPrototypeOf(input) && !init) {
     request = input;
-    if (request.method === 'POST') {
-      throw new Error('rexxarFetch POST error: please use `rexxarFetch(input, init)` for HTTP POST');
+    if (request.method === 'POST' || request.method === 'PUT' || request.method === 'DELETE') {
+      throw new Error(`rexxarFetch ${request.method} error: please use \`rexxarFetch(input, init)\` for HTTP ${request.method}`);
     }
   } else {
     request = new Request(input, init);
   }
 
-  if (request.method === 'POST') {
+  if (request.method === 'POST' || request.method === 'PUT' || request.method === 'DELETE') {
     let contentType = request.headers.get('content-type');
     let body = init.body;
+    let method = request.method;
 
     if (!contentType && !body ) {
-      input = `${input}&_rexxar_method=POST`.replace(/[&?]/, '?');
+      input = `${input}&_rexxar_method=${method}`.replace(/[&?]/, '?');
       promise = fetch(input);
     } else if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
       if (window && 'URLSearchParams' in window && window.URLSearchParams.prototype.isPrototypeOf(body)) {
         body = body.toString();
       }
       if (getType(body) === 'String') {
-        input = `${input}&${body}&_rexxar_method=POST`.replace(/[&?]/, '?');
+        input = `${input}&${body}&_rexxar_method=${method}`.replace(/[&?]/, '?');
         promise = fetch(input);
       } else {
-        throw new Error('rexxarFetch POST error: cannot handle this body type');
+        throw new Error(`rexxarFetch ${method} error: cannot handle this body type`);
       }
     } else {
-      throw new Error('rexxarFetch POST error: only supports `application/x-www-form-urlencoded` as content-type');
+      throw new Error(`rexxarFetch ${method} error: only supports \`application/x-www-form-urlencoded\` as content-type`);
     }
   } else {
     promise = fetch(request);
