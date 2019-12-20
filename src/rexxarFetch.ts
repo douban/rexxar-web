@@ -1,9 +1,7 @@
 import fetch from 'isomorphic-fetch';
-
 import { str2obj, getType } from './utils';
 
 const navigator = typeof window !== 'undefined' ? window.navigator : null;
-
 const isAndroid = navigator ? /android/i.test(navigator.userAgent.toLowerCase()) : true;
 
 /**
@@ -16,15 +14,15 @@ const isAndroid = navigator ? /android/i.test(navigator.userAgent.toLowerCase())
  * @param {object} init Options for Request
  * @returns {function} Promise A Promise that resolves to a Response object.
  */
-export default function rexxarFetch(input, init) {
 
-  let request;
+export default (input:Request | string, init:RequestInit):Promise<Response> =>{
+  let request:Request;
   let promise;
-
-  if (Request.prototype.isPrototypeOf(input) && !init) {
+  
+  if (typeof(input) !== 'string' && !init) {
     request = input;
     if (request.method === 'POST') {
-      throw new Error('rexxarFetch POST error: please use `rexxarFetch(input, init)` for HTTP POST');
+      throw new Error('rexxarFetch POST error: please use `rexxarFetch(input, init)` for HTTP POST')
     }
   } else {
     request = new Request(input, init);
@@ -38,7 +36,9 @@ export default function rexxarFetch(input, init) {
       input = `${input}&_rexxar_method=POST`.replace(/[&?]/, '?');
       promise = fetch(input);
     } else if (contentType && contentType.indexOf('application/x-www-form-urlencoded') > -1) {
-      if (window && 'URLSearchParams' in window && window.URLSearchParams.prototype.isPrototypeOf(body)) {
+      if (body && window && 
+          'URLSearchParams' in window && 
+          window.URLSearchParams.prototype.isPrototypeOf(body)) {
         body = body.toString();
       }
       if (getType(body) === 'String') {
@@ -55,10 +55,10 @@ export default function rexxarFetch(input, init) {
   }
 
   return promise.then(resolveResponse);
-
 }
 
-function resolveResponse(response) {
+
+function resolveResponse(response:Response):Response | Promise<Response> {
 
   if (isAndroid) {
     let responseBackup = response.clone();
