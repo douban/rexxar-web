@@ -2,32 +2,45 @@
  * IMPORTANT: This is deprecated
  */
 
-import { obj2str, getType } from './utils';
+import { obj2str, getType } from './utils'; 
 
 /**
  * Accept sheme and host as configrations, Returns a base class for Widget inheritance.
  * See `example` folder as an example of the RexxarWidget Usage.
- *
- * @param {object} config { scheme: 'douban', host: 'rexxar-container' }
- * @returns {function} RexxarWidget Inherit RexxarWidget and writing you own widget
  */
-export default function getRexxarWidget({ scheme, host }) {
 
-  if (!scheme || getType(scheme) !== 'String') {
-    throw new Error('getRexxarWidget config `scheme` expected a non-empty string.')
+interface Config {
+  schema: 'douban',
+  host: 'rexxar-container'
+}
+
+interface RexxarWidgetCall {
+  (params:string|null|undefined): void
+}
+
+interface RexxarWidget {
+  name: string,
+  call: RexxarWidgetCall
+}
+
+export default (config:Config):RexxarWidget => {
+  const { schema, host } = config;
+  if (!schema || getType(schema) !== 'String') {
+    throw new Error('getRexxarWidget config `schema` expected a non-empty string.')
   }
 
   if (!host || getType(host) !== 'String') {
     throw new Error('getRexxarWidget config `host` expected a non-empty string.')
   }
 
-  return class RexxarWidget {
+  return class RexxarWidget implements RexxarWidget {
+    name:string
 
-    constructor(name) {
+    constructor(name:string) {
       this.name = name;
     }
 
-    call(params) {
+    call(params:string|null|undefined) {
       let search;
       if (getType(params) === 'Object') {
         search = '?' + obj2str(params);
@@ -37,17 +50,15 @@ export default function getRexxarWidget({ scheme, host }) {
         throw new Error('`call` method in RexxarWidget expected argument to be an object.');
       }
 
-      let pathname = `/${this.name}`;
+      const pathname = `/${this.name}`;
 
-      let iframe = document.createElement('iframe');
-      iframe.src = `${scheme}://${host}${pathname}${search}`;
+      const iframe = document.createElement('iframe');
+      iframe.src = `${schema}://${host}${pathname}${search}`;
       iframe.style.display = 'none';
       document.documentElement.appendChild(iframe);
       setTimeout(function() {
         document.documentElement.removeChild(iframe);
       }, 0);
     }
-
   }
-
 }
